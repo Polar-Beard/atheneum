@@ -20,6 +20,10 @@ public class Story {
         this.viewCount = 0;
     }
 
+    public long getStoryId(){
+      return storyId;
+    }
+
     public String getTitle(){
         return title;
     }
@@ -34,6 +38,10 @@ public class Story {
 
     public int getViewCount(){
         return viewCount;
+    }
+
+    public void setStoryId(long storyId){
+      this.storyId = storyId;
     }
 
     public void setTitle(String title){
