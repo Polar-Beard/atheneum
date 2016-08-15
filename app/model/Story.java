@@ -1,5 +1,11 @@
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 public class Story {
 
