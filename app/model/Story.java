@@ -10,8 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class Story {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    //@GeneratedValue(generator = "uuid")
+    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     private long storyId;
 
     private String title;
