@@ -10,9 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 public class Story {
 
     @Id
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
-    private long storyId;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String storyId;
 
     private String title;
     private String description;
@@ -26,7 +26,7 @@ public class Story {
         this.viewCount = 0;
     }
 
-    public long getStoryId(){
+    public String getStoryId(){
       return storyId;
     }
 
@@ -46,7 +46,7 @@ public class Story {
         return viewCount;
     }
 
-    public void setStoryId(long storyId){
+    public void setStoryId(String storyId){
       this.storyId = storyId;
     }
 
