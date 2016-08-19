@@ -19,6 +19,10 @@ public class Story {
     private String author;
     private int viewCount;
 
+    public Story(){
+      this("","","");
+    }
+
     public Story(String title, String description, String author){
         this.title  = title;
         this.description = description;
@@ -26,7 +30,6 @@ public class Story {
         this.viewCount = 0;
         this.storyId = UUID.randomUUID();
     }
-
     public UUID getStoryId(){
       return storyId;
     }
