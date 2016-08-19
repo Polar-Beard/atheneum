@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -10,9 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class Story {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String storyId;
+    private UUID storyId;
 
     private String title;
     private String description;
@@ -24,9 +24,10 @@ public class Story {
         this.description = description;
         this.author = author;
         this.viewCount = 0;
+        this.storyId = UUID.randomUUID();
     }
 
-    public String getStoryId(){
+    public UUID getStoryId(){
       return storyId;
     }
 
@@ -46,7 +47,7 @@ public class Story {
         return viewCount;
     }
 
-    public void setStoryId(String storyId){
+    public void setStoryId(UUID storyId){
       this.storyId = storyId;
     }
 
