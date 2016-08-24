@@ -33,7 +33,7 @@ public class StoryTest{
     em.getTransaction().begin();
 
     //Create a Story
-    Story atlasShrugged = new Story("Atlas Shrugged", "Best story ever", "Ayn Rand");
+    Story atlasShrugged = new Story("Atlas Shrugged", "Best story ever!!", "Ayn Rand");
 
     //Persist the Story
     em.persist(atlasShrugged);

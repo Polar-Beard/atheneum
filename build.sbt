@@ -17,5 +17,6 @@ libraryDependencies ++= Seq(
   "org.hibernate.ogm" % "hibernate-ogm-infinispan" % "5.0.1.Final",
   "org.hibernate.ogm" % "hibernate-ogm-core" % "5.0.1.Final",
   "org.hibernate" % "hibernate-entitymanager" % "4.2.21.Final",
-  "org.jboss.jbossts" % "jbossjta" % "4.16.6.Final"
+  "org.jboss.jbossts" % "jbossjta" % "4.16.6.Final",
+  "com.google.inject.extensions" % "guice-persist" % "4.1.0"
 )
