@@ -1,14 +1,19 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import model.Story;
+
+import java.util.List;
+import java.util.UUID;
+
 import play.mvc.*;
-
-import views.html.*;
-
-import model.*;
+import play.libs.Json;
 
 import javax.persistence.EntityManager;
-import javax.inject.*;
 import javax.persistence.Persistence;
+import javax.inject.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class StoryController extends Controller{
 
@@ -19,19 +24,72 @@ public class StoryController extends Controller{
     this.em = em;
   }
 
-  public Result create() {
+  public Result addStory(){
 
-      em.getTransaction().begin();
+      //Get HTTP POST request body as a Json object
+      JsonNode storyAsJson = request().body().asJson();
 
-      // Create a Story
-      Story atlasShrugged = new Story("The Fountainhead", "Howard Roark is one badass motherfucker", "Ayn Rand");
-
-      // Persist the Story
-      em.persist(atlasShrugged);
-      em.getTransaction().commit();
-
-      em.close();
-
-      return ok("The Fountainhead created");
+      return addStoryToDatabase(storyAsJson);
     }
+
+    public Result getStory(UUID storyId){
+
+        Json json = new Json();
+        Story story = null;
+
+        if(storyId == null) {
+            return badRequest("Missing parameter [storyId]");
+        } else {
+            em.getTransaction();
+            story = em.find(Story.class, storyId);
+        }
+        return ok(json.toJson(story));
+    }
+
+    /*public Result updateStory(UUID storyId){
+
+        Story story = null;
+        JsonNode storyAsJson = request().body().asJson();
+
+        //Find the story in the database
+        if(storyId == null) {
+            return badRequest("Missing parameter [storyId]");
+        } else{
+            em.getTransaction();
+            story = em.find(Story.class, storyId);
+        }
+
+        //Creates a new story if could not be found in database
+        if(story == null){
+            return addStoryToDatabase(storyAsJson);
+        } else {
+            ObjectNode oNode = (ObjectNode) storyAsJson;
+            oNode.put
+            story.getStoryId()
+        }
+
+
+
+    }*/
+
+    private Result addStoryToDatabase(JsonNode storyAsJson){
+        Json json = new Json();
+        Story storyFromJson = null;
+        Result result = null;
+
+        if(storyAsJson == null){
+            result = badRequest("Expected JSON body");
+        } else{
+            storyFromJson = json.fromJson(storyAsJson, Story.class);
+
+            //Save Story object in database
+            em.getTransaction().begin();
+            em.persist(storyFromJson);
+            em.getTransaction().commit();
+
+            result = ok("Story added to database");
+        }
+        return result;
+    }
+
 }

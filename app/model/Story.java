@@ -4,9 +4,6 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Story {
@@ -20,16 +17,17 @@ public class Story {
     private int viewCount;
 
     public Story(){
-      this("","","");
+      this("","","", null);
     }
 
-    public Story(String title, String description, String author){
+    public Story(String title, String description, String author, UUID storyId){
         this.title  = title;
         this.description = description;
         this.author = author;
         this.viewCount = 0;
-        this.storyId = UUID.randomUUID();
+        this.storyId = (storyId == null)? UUID.randomUUID() : storyId;
     }
+
     public UUID getStoryId(){
       return storyId;
     }
