@@ -21,3 +21,7 @@ libraryDependencies ++= Seq(
   "com.google.inject.extensions" % "guice-persist" % "4.1.0",
   "com.google.code.gson" % "gson" % "2.7"
 )
+
+sources in (Compile, doc) := Seq.empty
+
+publishArtifact in (Compile, packageDoc) := false
