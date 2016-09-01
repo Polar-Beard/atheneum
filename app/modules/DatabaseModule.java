@@ -22,7 +22,7 @@ public class DatabaseModule extends AbstractModule {
 
   @Override
   public void configure() {
-    install(new JpaPersistModule("storyPu"));
+    install(new JpaPersistModule("me-atheneum-story-pu"));
     bind(JPAInitializer.class).asEagerSingleton();
   };
 
