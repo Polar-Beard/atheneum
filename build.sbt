@@ -1,8 +1,14 @@
 name := """atheneum"""
 
-version := "1.0-SNAPSHOT"
+version := "1.0"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file(".")).enablePlugins(PlayJava, DebianPlugin)
+
+maintainer in Linux := "Sara Montecino <saramontecino@outlook.com>"
+
+packageSummary in Linux := "Atheneum Server API and Configuration"
+
+packageDescription := "Atheneum Server API and Configuration"
 
 scalaVersion := "2.11.7"
 
