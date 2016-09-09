@@ -10,18 +10,20 @@ import play.mvc.*;
 import play.libs.Json;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.inject.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class StoryController extends Controller{
+  private static final String DB_PU = "me-atheneum-story-pu";
 
+  private EntityManagerFactory emf;
   private EntityManager em;
 
-  @Inject
-  public StoryController(EntityManager em){
-    this.em = em;
+  public StoryController(){
+    emf = Persistence.createEntityManagerFactory(DB_PU);
+    this.em = emf.createEntityManager();
   }
 
   public Result addStory(){
