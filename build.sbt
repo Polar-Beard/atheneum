@@ -1,6 +1,6 @@
 name := """atheneum"""
 
-version := "1.0"
+version := "No Guice"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, DebianPlugin)
 
