@@ -1,19 +1,30 @@
 package model;
 
+import org.hibernate.search.annotations.*;
+
 import java.util.UUID;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="stories")
+@Indexed
 public class Story {
 
     @Id
     private UUID storyId;
-
+    @Field(index= Index.YES, analyze= Analyze.YES, store= Store.NO)
+    private Date date;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String title;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String author;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private int viewCount;
 
     public Story(){
@@ -26,10 +37,15 @@ public class Story {
         this.author = author;
         this.viewCount = 0;
         this.storyId = (storyId == null)? UUID.randomUUID() : storyId;
+        this.date = new Date();
     }
 
     public UUID getStoryId(){
       return storyId;
+    }
+
+    public Date getDate(){
+      return date;
     }
 
     public String getTitle(){
@@ -50,6 +66,10 @@ public class Story {
 
     public void setStoryId(UUID storyId){
       this.storyId = storyId;
+    }
+
+    public void setDate(Date date){
+      this.date = date;
     }
 
     public void setTitle(String title){
