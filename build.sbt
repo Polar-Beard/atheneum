@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-entitymanager" % "4.2.21.Final",
   "org.jboss.jbossts" % "jbossjta" % "4.16.6.Final",
   "com.google.inject.extensions" % "guice-persist" % "4.1.0",
-  "com.google.code.gson" % "gson" % "2.7"
+  "com.google.code.gson" % "gson" % "2.7",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 sources in (Compile, doc) := Seq.empty
