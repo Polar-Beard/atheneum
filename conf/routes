@@ -14,3 +14,9 @@ GET     /api/story/id/:id          controllers.StoryController.getStory(id: java
 GET     /api/story/n/:n          controllers.StoryController.getStories(n: Int)
 
 POST    /api/story          controllers.StoryController.addStory
+
+# User controller CRUD
+
+POST   /api/user/register   controllers.UserController.register
+
+GET    /api/user/login      controllers.UserController.login

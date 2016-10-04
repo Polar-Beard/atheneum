@@ -1,0 +1,17 @@
+package actions;
+
+import play.mvc.With;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Created by Sara on 9/30/2016.
+ */
+@With(BasicAuthAction.class)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface BasicAuth {
+}

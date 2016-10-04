@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @JsonSerialize
 public class StoryController extends Controller {
-    private static final String DB_PU = "me-atheneum-story-pu";
+    private static final String DB_PU = "me-atheneum-pu";
     private static EntityManagerFactory emf;
 
     static {
