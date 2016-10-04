@@ -8,7 +8,7 @@
     <persistence-unit name="me-atheneum-pu" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ogm.jpa.HibernateOgmPersistence</provider>
         <class>model.Story</class>
-        <class>test.StoryTest</class>
+        <class>model.User</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.ogm.datastore.provider" value="cassandra_experimental" />
