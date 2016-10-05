@@ -4,15 +4,14 @@
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
+
+import model.User;
+
 import services.IndexInitializer;
 
-import javax.persistence.EntityManager;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -31,6 +30,7 @@ public class Module extends AbstractModule {
         install(new JpaPersistModule("me-atheneum-pu"));
         bind(JPAInitializer.class).asEagerSingleton();
         bind(IndexInitializer.class).asEagerSingleton();
+        requestStaticInjection(User.class);
     }
 
     @Singleton

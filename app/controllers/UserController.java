@@ -22,21 +22,6 @@ import javax.persistence.Persistence;
  */
 public class UserController extends Controller {
 
-    /*private static EntityManagerFactory emf;
-    private static final String DB_PU = "me-atheneum-pu";
-
-    static {
-        //emf = Persistence.createEntityManagerFactory(DB_PU);
-        //EntityManager em = emf.createEntityManager();
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-        try {
-            fullTextEntityManager.createIndexer().startAndWait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        em.close();
-    }
-    */
     private Provider<EntityManager> emProvider;
 
     @Inject

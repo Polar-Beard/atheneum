@@ -1,5 +1,7 @@
 package model;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -24,20 +26,7 @@ public class User {
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String lastName;
 
-    private static EntityManagerFactory emf;
-    private static final String DB_PU = "me-atheneum-pu";
-
-    static {
-        emf = Persistence.createEntityManagerFactory(DB_PU);
-        EntityManager em = emf.createEntityManager();
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-        try {
-            fullTextEntityManager.createIndexer().startAndWait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        em.close();
-    }
+    @Inject private static Provider<EntityManager> emProvider;
 
     public User(){
     }
@@ -48,7 +37,7 @@ public class User {
     }
 
     public static boolean isValid(String emailAddress, String password){
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = emProvider.get();
         em.getTransaction().begin();
         User user = em.find(User.class, emailAddress);
         em.getTransaction().commit();
