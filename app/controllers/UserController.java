@@ -2,6 +2,9 @@ package controllers;
 
 import actions.BasicAuth;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.persist.Transactional;
 import model.User;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -19,12 +22,12 @@ import javax.persistence.Persistence;
  */
 public class UserController extends Controller {
 
-    private static EntityManagerFactory emf;
+    /*private static EntityManagerFactory emf;
     private static final String DB_PU = "me-atheneum-pu";
 
     static {
-        emf = Persistence.createEntityManagerFactory(DB_PU);
-        EntityManager em = emf.createEntityManager();
+        //emf = Persistence.createEntityManagerFactory(DB_PU);
+        //EntityManager em = emf.createEntityManager();
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
         try {
             fullTextEntityManager.createIndexer().startAndWait();
@@ -32,6 +35,13 @@ public class UserController extends Controller {
             e.printStackTrace();
         }
         em.close();
+    }
+    */
+    private Provider<EntityManager> emProvider;
+
+    @Inject
+    public UserController(Provider<EntityManager> emProvider){
+        this.emProvider = emProvider;
     }
 
     public Result register(){
@@ -41,7 +51,7 @@ public class UserController extends Controller {
             return badRequest("Expected JSON body");
         } else {
             User user = json.fromJson(userAsJson, User.class);
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = emProvider.get();
             em.getTransaction().begin();
 
             //Make sure user doesn't already exist in database
