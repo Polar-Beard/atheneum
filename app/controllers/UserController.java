@@ -44,15 +44,15 @@ public class UserController extends Controller {
             EntityManager em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            //Make sure user doesn't already exist in database
-            boolean userWasAddedToDatabase = false;
+            //Add user so long as the email address is not already stored in database
+            boolean userSuccessfullyAdded = false;
             if(em.find(User.class, user.getEmailAddress()) == null) {
                 em.persist(user);
-                userWasAddedToDatabase = true;
+                userSuccessfullyAdded = true;
             }
             em.getTransaction().commit();
             em.close();
-            return (userWasAddedToDatabase)? ok("User added to database."): badRequest("Error: User already exists in database.");
+            return (userSuccessfullyAdded)? ok("User added to database."): badRequest("Error: User already exists in database.");
         }
 
     }

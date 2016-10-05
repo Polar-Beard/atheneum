@@ -55,16 +55,14 @@ public class StoryController extends Controller {
 
     public Result getStory(UUID storyId) {
         Json json = new Json();
-        Story story = null;
         if (storyId == null) {
             return badRequest("Missing parameter [storyId]");
-        } else {
-            EntityManager em = emf.createEntityManager();
-            em.getTransaction().begin();
-            story = em.find(Story.class, storyId);
-            em.getTransaction().commit();
-            em.close();
         }
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Story story = em.find(Story.class, storyId);
+        em.getTransaction().commit();
+        em.close();
         return ok(json.toJson(story));
     }
 
