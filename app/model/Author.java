@@ -18,11 +18,11 @@ public class Author {
     @Id
     private UUID authorId;
     private String userEmailAddress;
-    private List<UUID> storiesAuthoredIds;
+    //private List<UUID> storiesAuthoredIds;
 
     public Author(){
         authorId = UUID.randomUUID();
-        storiesAuthoredIds = new ArrayList<>();
+        //storiesAuthoredIds = new ArrayList<>();
     }
 
     private UUID getAuthorId(){
@@ -33,9 +33,9 @@ public class Author {
         return userEmailAddress;
     }
 
-    private List<UUID> getStoriesAuthoredIds(){
+    /*private List<UUID> getStoriesAuthoredIds(){
         return storiesAuthoredIds;
-    }
+    }*/
 
     private void setAuthorId(UUID authorId){
         this.authorId = authorId;
@@ -46,13 +46,13 @@ public class Author {
         this.userEmailAddress = userEmailAddress;
     }
 
-    private void setStoriesAuthoredIds(List<UUID> storiesAuthoredIds){
+    /*private void setStoriesAuthoredIds(List<UUID> storiesAuthoredIds){
         this.storiesAuthoredIds = storiesAuthoredIds;
     }
 
     private void addStoryAuthoredId(UUID storyId){
         storiesAuthoredIds.add(storyId);
-    }
+    }*/
 
 
 }

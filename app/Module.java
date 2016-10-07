@@ -8,8 +8,8 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 
-import model.User;
-
+import daos.StoryDAO;
+import daos.UserDAO;
 import services.IndexInitializer;
 
 
@@ -30,7 +30,8 @@ public class Module extends AbstractModule {
         install(new JpaPersistModule("me-atheneum-pu"));
         bind(JPAInitializer.class).asEagerSingleton();
         bind(IndexInitializer.class).asEagerSingleton();
-        requestStaticInjection(User.class);
+        requestStaticInjection(StoryDAO.class);
+        requestStaticInjection(UserDAO.class);
     }
 
     @Singleton

@@ -1,14 +1,16 @@
 package model;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+
+import daos.UserDAO;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
+
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 /**
  * Created by Sara on 9/30/2016.
@@ -19,14 +21,11 @@ import javax.persistence.*;
 public class User {
     @Id
     private String emailAddress;
-    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String password;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String firstName;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String lastName;
-
-    @Inject private static Provider<EntityManager> emProvider;
 
     public User(){
     }
@@ -37,11 +36,7 @@ public class User {
     }
 
     public static boolean isValid(String emailAddress, String password){
-        EntityManager em = emProvider.get();
-        em.getTransaction().begin();
-        User user = em.find(User.class, emailAddress);
-        em.getTransaction().commit();
-        em.close();
+        User user = (new UserDAO()).getUser(emailAddress);
         return BCrypt.checkpw(password,user.getPassword());
     }
 
