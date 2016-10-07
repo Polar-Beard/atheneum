@@ -7,9 +7,7 @@ import org.hibernate.search.annotations.Index;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -26,6 +24,9 @@ public class User {
     private String firstName;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String lastName;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="author_id")
+    private Author author;
 
     public User(){
     }
@@ -33,6 +34,7 @@ public class User {
     public User(String emailAddress, String password){
         this.emailAddress = emailAddress;
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+        this.author = new Author();
     }
 
     public static boolean isValid(String emailAddress, String password){
@@ -56,6 +58,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
     public String getEmailAddress(){
         return emailAddress;
     }
@@ -70,5 +76,9 @@ public class User {
 
     public String getLastName(){
         return lastName;
+    }
+
+    public Author getAuthor(){
+        return author;
     }
 }

@@ -3,6 +3,7 @@ package daos;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
+import model.Author;
 import model.User;
 
 import javax.persistence.EntityManager;
@@ -21,6 +22,7 @@ public class UserDAO {
         //Add user so long as the email address is not already stored in database
         boolean userAdded = false;
         if(em.find(User.class, user.getEmailAddress()) == null) {
+            user.setAuthor(new Author());
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();
