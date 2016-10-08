@@ -16,8 +16,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long authorId;
-    @OneToMany
-    @JoinColumn(name="author_id")
+    @OneToMany(mappedBy = "author")
     private List<Story> stories;
 
     public Author(){

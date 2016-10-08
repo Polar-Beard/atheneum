@@ -21,6 +21,7 @@ public class Story {
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
     @ManyToOne
+    @JoinColumn(name="authorId")
     private Author author;
 
     public Story(){

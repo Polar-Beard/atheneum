@@ -22,6 +22,7 @@ public class UserDAO {
         //Add user so long as the email address is not already stored in database
         boolean userAdded = false;
         if(em.find(User.class, user.getEmailAddress()) == null) {
+            //Create a new author to associate with the user
             user.setAuthor(new Author());
             em.getTransaction().begin();
             em.persist(user);
