@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import services.HttpAuthorizationParser;
 import sun.misc.BASE64Decoder;
 
 @JsonSerialize
@@ -31,17 +32,9 @@ public class StoryController extends Controller {
 
     @BasicAuth
     public Result addStory() {
-        String authHeader = request().getHeader("authorization");
-        String auth = authHeader.substring(6);
-        String userEmail = null;
-        try {
-            byte[] decodedAuth = new BASE64Decoder().decodeBuffer(auth);
-            String[] credString = new String(decodedAuth, "UTF-8").split(":");
-            userEmail = credString[0];
-        } catch(IOException e){
-            e.printStackTrace();
-            return internalServerError();
-        }
+        HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
+        String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
+        String userEmail = credString[0];
         JsonNode storyAsJson = request().body().asJson();
         if (storyAsJson == null) {
             return badRequest("Expected JSON body");

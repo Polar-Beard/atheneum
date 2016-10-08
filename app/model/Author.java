@@ -23,19 +23,19 @@ public class Author {
         stories = new ArrayList<>();
     }
 
-    private Long getAuthorId(){
+    public Long getAuthorId(){
         return authorId;
     }
 
-    private List<Story> getStories(){
+    public List<Story> getStories(){
         return stories;
     }
 
-    private void setAuthorId(Long authorId){
+    public void setAuthorId(Long authorId){
         this.authorId = authorId;
     }
 
-    private void setStories(List<Story> stories){
+    public void setStories(List<Story> stories){
         this.stories = stories;
     }
 

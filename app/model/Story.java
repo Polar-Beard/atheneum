@@ -20,7 +20,7 @@ public class Story {
     private String title;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="authorId")
     private Author author;
 

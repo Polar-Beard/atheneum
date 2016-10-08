@@ -3,6 +3,7 @@ package daos;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
+import model.Author;
 import model.Story;
 
 import javax.persistence.EntityManager;
@@ -19,7 +20,9 @@ public class StoryDAO{
     public void addStory(String emailAddress, Story story){
         EntityManager em = emProvider.get();
         UserDAO userDAO = new UserDAO();
-        story.setAuthor(userDAO.getUser(emailAddress).getAuthor());
+        Author author = userDAO.getUser(emailAddress).getAuthor();
+        story.setAuthor(author);
+        author.getStories().add(story);
         em.getTransaction().begin();
         em.persist(story);
         em.getTransaction().commit();
