@@ -39,4 +39,11 @@ public class StoryDAO{
         EntityManager em = emProvider.get();
         return em.createQuery("SELECT s FROM Story s", Story.class).setMaxResults(n).getResultList();
     }
+
+    @Transactional
+    public List<Story> getStoriesByAuthor(Long authorId){
+        EntityManager em = emProvider.get();
+        Author author = em.find(Author.class, authorId);
+        return author.getStories();
+    }
 }

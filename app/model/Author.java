@@ -1,6 +1,8 @@
 package model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class Author {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long authorId;
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     private List<Story> stories;
 
     public Author(){

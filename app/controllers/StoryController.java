@@ -3,31 +3,31 @@ package controllers;
 import actions.BasicAuth;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+
 import daos.StoryDAO;
+import daos.UserDAO;
+import model.Author;
 import model.Story;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
+import model.User;
 import play.mvc.*;
 import play.libs.Json;
 
-import javax.persistence.EntityManager;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import services.HttpAuthorizationParser;
-import sun.misc.BASE64Decoder;
 
 @JsonSerialize
 public class StoryController extends Controller {
     private StoryDAO storyDAO;
+    private UserDAO userDAO;
 
     public StoryController(){
         storyDAO = new StoryDAO();
+        userDAO = new UserDAO();
     }
 
     @BasicAuth
@@ -54,6 +54,23 @@ public class StoryController extends Controller {
 
     public Result getStories(int numberOfStories) {
         List<Story> stories = storyDAO.getStories(numberOfStories);
+        if (stories.isEmpty()) {
+            return badRequest("No stories found in database");
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        JsonNode jsonNode = objectMapper.valueToTree(stories);
+        return ok(jsonNode);
+    }
+
+    @BasicAuth
+    public Result getCurrentUserStories(){
+        HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
+        String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
+        String userEmail = credString[0];
+        User user  = userDAO.getUser(userEmail);
+        Author author = user.getAuthor();
+        List<Story> stories = storyDAO.getStoriesByAuthor(author.getAuthorId());
         if (stories.isEmpty()) {
             return badRequest("No stories found in database");
         }
