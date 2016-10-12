@@ -37,7 +37,7 @@ public class StoryDAO{
     @Transactional
     public List<Story> getStories(int n){
         EntityManager em = emProvider.get();
-        return em.createQuery("SELECT s FROM Story s", Story.class).setMaxResults(n).getResultList();
+        return em.createQuery("SELECT s FROM Story s", Story.class).getResultList();
     }
 
     @Transactional

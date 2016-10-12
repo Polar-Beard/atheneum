@@ -1,6 +1,8 @@
 package model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
 
@@ -21,7 +23,7 @@ public class Story {
     private String title;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="authorId")
     @JsonBackReference
     private Author author;

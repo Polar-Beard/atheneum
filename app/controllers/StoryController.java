@@ -57,6 +57,9 @@ public class StoryController extends Controller {
         if (stories.isEmpty()) {
             return badRequest("No stories found in database");
         }
+        for(Story s: stories){
+            System.out.println(s.getTitle());
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         JsonNode jsonNode = objectMapper.valueToTree(stories);
