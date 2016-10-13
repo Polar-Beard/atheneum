@@ -13,7 +13,7 @@ GET     /api/story/id/:id          controllers.StoryController.getStory(id: java
 
 GET     /api/story/n/:n          controllers.StoryController.getStories(n: Int)
 
-GET     /api/story/author       controllers.StoryController.getCurrentUserStories
+# GET     /api/story/author       controllers.StoryController.getCurrentUserStories
 
 POST    /api/story          controllers.StoryController.addStory
 

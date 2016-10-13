@@ -66,7 +66,7 @@ public class StoryController extends Controller {
         return ok(jsonNode);
     }
 
-    @BasicAuth
+    /*@BasicAuth
     public Result getCurrentUserStories(){
         HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
         String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
@@ -81,5 +81,5 @@ public class StoryController extends Controller {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         JsonNode jsonNode = objectMapper.valueToTree(stories);
         return ok(jsonNode);
-    }
+    }*/
 }

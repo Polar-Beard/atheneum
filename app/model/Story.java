@@ -17,16 +17,28 @@ import javax.persistence.*;
 public class Story {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long storyId;
+    private UUID storyId;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String title;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="authorId")
-    @JsonBackReference
-    private Author author;
+    //@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@JoinColumn(name="authorId")
+    //@JsonBackReference
+    //private Author author;
+    private Long authorId;
+
+    public Story(){
+        this.storyId = 
+    }
+
+    public Long getAuthorId(){
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId){
+        this.authorId = authorId;
+    }
 
     public Story(){
     }
@@ -48,9 +60,9 @@ public class Story {
         return description;
     }
 
-    public Author getAuthor(){
+    /*public Author getAuthor(){
         return author;
-    }
+    }*/
 
     public void setStoryId(Long storyId){
       this.storyId = storyId;
@@ -64,8 +76,8 @@ public class Story {
         this.description = description;
     }
 
-    public void setAuthor(Author author){
+    /*public void setAuthor(Author author){
         this.author = author;
-    }
+    }*/
 
 }

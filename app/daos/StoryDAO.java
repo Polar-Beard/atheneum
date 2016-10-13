@@ -21,8 +21,8 @@ public class StoryDAO{
         EntityManager em = emProvider.get();
         UserDAO userDAO = new UserDAO();
         Author author = userDAO.getUser(emailAddress).getAuthor();
-        story.setAuthor(author);
-        author.getStories().add(story);
+        story.setAuthorId(author.getAuthorId());
+        //author.getStories().add(story);
         em.getTransaction().begin();
         em.persist(story);
         em.getTransaction().commit();
@@ -37,13 +37,16 @@ public class StoryDAO{
     @Transactional
     public List<Story> getStories(int n){
         EntityManager em = emProvider.get();
-        return em.createQuery("SELECT s FROM Story s", Story.class).getResultList();
+        em.getTransaction().begin();
+        List<Story> stories = em.createQuery("SELECT s FROM Story s", Story.class).setMaxResults(n).getResultList();
+        em.getTransaction().commit();
+        return stories;
     }
 
-    @Transactional
+    /*@Transactional
     public List<Story> getStoriesByAuthor(Long authorId){
         EntityManager em = emProvider.get();
         Author author = em.find(Author.class, authorId);
         return author.getStories();
-    }
+    }*/
 }

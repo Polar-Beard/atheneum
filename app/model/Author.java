@@ -18,29 +18,29 @@ public class Author {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long authorId;
-    @OneToMany(mappedBy = "author")
-    @JsonManagedReference
-    private List<Story> stories;
+    //@OneToMany(mappedBy = "author")
+    //@JsonManagedReference
+    //private List<Story> stories;
 
     public Author(){
-        stories = new ArrayList<>();
+        //stories = new ArrayList<>();
     }
 
-    public Long getAuthorId(){
+   public Long getAuthorId(){
         return authorId;
     }
 
-    public List<Story> getStories(){
+    /*public List<Story> getStories(){
         return stories;
-    }
+    }*/
 
     public void setAuthorId(Long authorId){
         this.authorId = authorId;
     }
 
-    public void setStories(List<Story> stories){
+    /*public void setStories(List<Story> stories){
         this.stories = stories;
-    }
+    }*/
 
 
 
