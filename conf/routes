@@ -9,7 +9,7 @@ GET     /                   controllers.HomeController.index
 GET     /assets/*file       controllers.Assets.versioned(path="/public", file: Asset)
 
 # Story controller CRUD
-GET     /api/story/id/:id          controllers.StoryController.getStory(id: java.lang.Long)
+GET     /api/story/id/:id          controllers.StoryController.getStory(id: java.util.UUID)
 
 GET     /api/story/n/:n          controllers.StoryController.getStories(n: Int)
 

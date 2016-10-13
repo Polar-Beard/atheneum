@@ -7,6 +7,7 @@ import model.Author;
 import model.User;
 
 import javax.persistence.EntityManager;
+import java.util.UUID;
 
 /**
  * Created by Sara on 10/5/2016.
@@ -23,7 +24,7 @@ public class UserDAO {
         boolean userAdded = false;
         if(em.find(User.class, user.getEmailAddress()) == null) {
             //Create a new author to associate with the user
-            user.setAuthor(new Author());
+            user.setAuthorId(UUID.randomUUID());
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();

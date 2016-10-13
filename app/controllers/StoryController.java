@@ -10,6 +10,7 @@ import model.Author;
 import model.Story;
 
 import java.util.List;
+import java.util.UUID;
 
 import model.User;
 import play.mvc.*;
@@ -44,7 +45,7 @@ public class StoryController extends Controller {
         return ok("Story added to database");
     }
 
-    public Result getStory(Long storyId) {
+    public Result getStory(UUID storyId) {
         if (storyId == null) {
             return badRequest("Missing parameter [storyId]");
         }

@@ -16,17 +16,17 @@ import java.util.UUID;
 public class Author {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long authorId;
+    private UUID authorId;
     //@OneToMany(mappedBy = "author")
     //@JsonManagedReference
     //private List<Story> stories;
 
     public Author(){
         //stories = new ArrayList<>();
+        this.authorId = UUID.randomUUID();
     }
 
-   public Long getAuthorId(){
+   public UUID getAuthorId(){
         return authorId;
     }
 
@@ -34,7 +34,7 @@ public class Author {
         return stories;
     }*/
 
-    public void setAuthorId(Long authorId){
+    public void setAuthorId(UUID authorId){
         this.authorId = authorId;
     }
 

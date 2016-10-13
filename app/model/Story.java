@@ -26,21 +26,18 @@ public class Story {
     //@JoinColumn(name="authorId")
     //@JsonBackReference
     //private Author author;
-    private Long authorId;
+    private UUID authorId;
 
-    public Story(){
-        this.storyId = 
-    }
-
-    public Long getAuthorId(){
+    public UUID getAuthorId(){
         return authorId;
     }
 
-    public void setAuthorId(Long authorId){
+    public void setAuthorId(UUID authorId){
         this.authorId = authorId;
     }
 
     public Story(){
+        this.storyId = UUID.randomUUID();
     }
 
     public Story(String title, String description){
@@ -48,7 +45,7 @@ public class Story {
         this.description = description;
     }
 
-    public Long getStoryId(){
+    public UUID getStoryId(){
       return storyId;
     }
 
@@ -64,7 +61,7 @@ public class Story {
         return author;
     }*/
 
-    public void setStoryId(Long storyId){
+    public void setStoryId(UUID storyId){
       this.storyId = storyId;
     }
 
