@@ -35,7 +35,7 @@ public class BasicAuthAction extends Action<BasicAuth> {
         if(user == null){
             return CompletableFuture.completedFuture(Results.badRequest("User does not exist"));
         }
-        boolean validPassword = User.passwordIsValid(user, password);
+        boolean validPassword = user.isPasswordValid(password);
         return (validPassword)? delegate.call(context): CompletableFuture.completedFuture(Results.unauthorized());
     }
 }

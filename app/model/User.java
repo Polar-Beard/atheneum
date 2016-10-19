@@ -21,7 +21,6 @@ public class User {
     @Id
     private String emailAddress;
     private String password;
-    @Id
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private UUID userId;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
@@ -33,8 +32,8 @@ public class User {
         this.userId = UUID.randomUUID();
     }
 
-    public static boolean passwordIsValid(User user, String password){
-        return BCrypt.checkpw(password,user.getPassword());
+    public boolean isPasswordValid(String password){
+        return BCrypt.checkpw(password, this.getPassword());
     }
 
     public void setEmailAddress(String emailAddress){
