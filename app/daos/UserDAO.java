@@ -8,6 +8,7 @@ import model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,11 +49,18 @@ public class UserDAO {
     @Transactional
     public User findUserByEmail(String emailAddress){
         EntityManager em = emProvider.get();
-        List<User> results = em.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class).setParameter("emailAddress", emailAddress).getResultList();
-        if(results.isEmpty()){
+        try{
+            Query query = em.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class);
+            query.setParameter("emailAddress", emailAddress);
+            List<User> results = query.getResultList();
+            if(results.isEmpty()){
+                return null;
+            }
+            return results.get(0);
+        } catch(NullPointerException e){
+            e.printStackTrace();
             return null;
         }
-        return results.get(0);
     }
 
 }

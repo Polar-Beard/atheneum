@@ -58,7 +58,8 @@ public class StoryController extends Controller {
             return badRequest("Missing parameter [storyId]");
         }
         Story story = storyDAO.getStoryById(storyId);
-        return ok(Json.toJson(story));
+        JsonNode jsonNode = objectMapper.valueToTree(story);
+        return ok(jsonNode);
     }
 
     public Result getStories(int numberOfStories) {
