@@ -1,5 +1,6 @@
 package actions;
 
+import daos.UserDAO;
 import model.User;
 import play.mvc.Action;
 import play.mvc.Http;
@@ -30,7 +31,11 @@ public class BasicAuthAction extends Action<BasicAuth> {
         }
         String emailAddress = credString[0];
         String password = credString[1];
-        boolean userIsValid = User.isValid(emailAddress, password);
-        return (userIsValid)? delegate.call(context): CompletableFuture.completedFuture(Results.unauthorized());
+        User user = (new UserDAO()).getUser(emailAddress);
+        if(user == null){
+            return CompletableFuture.completedFuture(Results.badRequest("User does not exist"));
+        }
+        boolean validPassword = User.passwordIsValid(user, password);
+        return (validPassword)? delegate.call(context): CompletableFuture.completedFuture(Results.unauthorized());
     }
 }

@@ -22,10 +22,7 @@ public class Story {
     private String title;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
-    //@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@JoinColumn(name="authorId")
-    //@JsonBackReference
-    //private Author author;
+    @Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
     private UUID authorId;
 
     public UUID getAuthorId(){
@@ -40,11 +37,6 @@ public class Story {
         this.storyId = UUID.randomUUID();
     }
 
-    public Story(String title, String description){
-        this.title  = title;
-        this.description = description;
-    }
-
     public UUID getStoryId(){
       return storyId;
     }
@@ -56,10 +48,6 @@ public class Story {
     public String getDescription(){
         return description;
     }
-
-    /*public Author getAuthor(){
-        return author;
-    }*/
 
     public void setStoryId(UUID storyId){
       this.storyId = storyId;
@@ -73,8 +61,5 @@ public class Story {
         this.description = description;
     }
 
-    /*public void setAuthor(Author author){
-        this.author = author;
-    }*/
 
 }

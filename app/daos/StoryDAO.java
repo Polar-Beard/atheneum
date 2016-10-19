@@ -3,10 +3,11 @@ package daos;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
-import model.Author;
+
 import model.Story;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,12 +19,8 @@ public class StoryDAO{
    @Inject private static Provider<EntityManager> emProvider;
 
     @Transactional
-    public void addStory(String emailAddress, Story story){
+    public void addStory(Story story){
         EntityManager em = emProvider.get();
-        UserDAO userDAO = new UserDAO();
-        UUID authorId = userDAO.getUser(emailAddress).getAuthorId();
-        story.setAuthorId(authorId);
-        //author.getStories().add(story);
         em.getTransaction().begin();
         em.persist(story);
         em.getTransaction().commit();
@@ -41,10 +38,9 @@ public class StoryDAO{
         return em.createQuery("SELECT s FROM Story s", Story.class).setMaxResults(n).getResultList();
     }
 
-    /*@Transactional
-    public List<Story> getStoriesByAuthor(Long authorId){
+    @Transactional
+    public List<Story> getStoriesByAuthorId(UUID authorId){
         EntityManager em = emProvider.get();
-        Author author = em.find(Author.class, authorId);
-        return author.getStories();
-    }*/
+        return em.createQuery("FROM Story S WHERE S.authorId = :authorId", Story.class).setParameter("authorId", authorId).getResultList();
+    }
 }

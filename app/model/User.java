@@ -21,24 +21,19 @@ public class User {
     @Id
     private String emailAddress;
     private String password;
+    @Id
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+    private UUID userId;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String firstName;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String lastName;
-    //@OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name="author_id")
-    private UUID authorId;
 
     public User(){
+        this.userId = UUID.randomUUID();
     }
 
-    public User(String emailAddress, String password){
-        this.emailAddress = emailAddress;
-        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
-    }
-
-    public static boolean isValid(String emailAddress, String password){
-        User user = (new UserDAO()).getUser(emailAddress);
+    public static boolean passwordIsValid(User user, String password){
         return BCrypt.checkpw(password,user.getPassword());
     }
 
@@ -50,16 +45,16 @@ public class User {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
+    public void setUserId(UUID userId){
+        this.userId = userId;
+    }
+
     public void setFirstName(String firstName){
         this.firstName = firstName;
     }
 
     public void setLastName(String lastName){
         this.lastName = lastName;
-    }
-
-    public void setAuthorId(UUID authorId) {
-        this.authorId = authorId;
     }
 
     public String getEmailAddress(){
@@ -70,6 +65,10 @@ public class User {
         return password;
     }
 
+    public UUID getUserId(){
+        return userId;
+    }
+
     public String getFirstName(){
         return firstName;
     }
@@ -78,7 +77,4 @@ public class User {
         return lastName;
     }
 
-    public UUID getAuthorId(){
-        return authorId;
-    }
 }

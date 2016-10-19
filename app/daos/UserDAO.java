@@ -3,11 +3,13 @@ package daos;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
-import model.Author;
+
 import model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import java.util.UUID;
+
 
 /**
  * Created by Sara on 10/5/2016.
@@ -18,17 +20,15 @@ public class UserDAO {
 
     @Transactional
     public boolean addUser(User user){
+        boolean userAdded;
         EntityManager em = emProvider.get();
-
-        //Add user so long as the email address is not already stored in database
-        boolean userAdded = false;
-        if(em.find(User.class, user.getEmailAddress()) == null) {
-            //Create a new author to associate with the user
-            user.setAuthorId(UUID.randomUUID());
-            em.getTransaction().begin();
+        em.getTransaction().begin();
+        try {
             em.persist(user);
             em.getTransaction().commit();
             userAdded = true;
+        } catch(PersistenceException e){
+            userAdded = false;
         }
         return userAdded;
     }
@@ -37,6 +37,11 @@ public class UserDAO {
     public User getUser(String emailAddress){
         EntityManager em = emProvider.get();
         return em.find(User.class, emailAddress);
+    }
+
+    public User getUser(UUID userId){
+        EntityManager em = emProvider.get();
+        return em.find(User.class, userId);
     }
 
 }

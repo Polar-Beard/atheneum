@@ -4,9 +4,11 @@ import actions.BasicAuth;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import daos.StoryDAO;
 import daos.UserDAO;
-import model.Author;
+
 import model.Story;
 
 import java.util.List;
@@ -23,8 +25,14 @@ import services.HttpAuthorizationParser;
 
 @JsonSerialize
 public class StoryController extends Controller {
+    private static final ObjectMapper objectMapper;
     private StoryDAO storyDAO;
     private UserDAO userDAO;
+
+    static{
+        objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
 
     public StoryController(){
         storyDAO = new StoryDAO();
@@ -33,15 +41,15 @@ public class StoryController extends Controller {
 
     @BasicAuth
     public Result addStory() {
-        HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
-        String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
-        String userEmail = credString[0];
+        String userEmail = getEmailFromHeader();
         JsonNode storyAsJson = request().body().asJson();
         if (storyAsJson == null) {
             return badRequest("Expected JSON body");
         }
         Story story = Json.fromJson(storyAsJson, Story.class);
-        storyDAO.addStory(userEmail, story);
+        User author = userDAO.getUser(userEmail);
+        story.setAuthorId(author.getUserId());
+        storyDAO.addStory(story);
         return ok("Story added to database");
     }
 
@@ -58,29 +66,26 @@ public class StoryController extends Controller {
         if (stories.isEmpty()) {
             return badRequest("No stories found in database");
         }
-        for(Story s: stories){
-            System.out.println(s.getTitle());
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         JsonNode jsonNode = objectMapper.valueToTree(stories);
         return ok(jsonNode);
     }
 
-    /*@BasicAuth
+    @BasicAuth
     public Result getCurrentUserStories(){
+        String userEmail = getEmailFromHeader();
+        User currentUser = userDAO.getUser(userEmail);
+        List<Story> stories = storyDAO.getStoriesByAuthorId(currentUser.getUserId());
+        if (stories.isEmpty()) {
+            return badRequest("No stories found for current user");
+        }
+        ArrayNode arrayNode = objectMapper.valueToTree(stories);
+        arrayNode.add(Json.toJson(currentUser));
+        return ok(arrayNode);
+    }
+
+    private String getEmailFromHeader(){
         HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
         String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
-        String userEmail = credString[0];
-        User user  = userDAO.getUser(userEmail);
-        Author author = user.getAuthor();
-        List<Story> stories = storyDAO.getStoriesByAuthor(author.getAuthorId());
-        if (stories.isEmpty()) {
-            return badRequest("No stories found in database");
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        JsonNode jsonNode = objectMapper.valueToTree(stories);
-        return ok(jsonNode);
-    }*/
+        return credString[0];
+    }
 }
