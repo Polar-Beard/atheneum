@@ -39,9 +39,4 @@ public class UserDAO {
         return em.find(User.class, emailAddress);
     }
 
-    public User getUser(UUID userId){
-        EntityManager em = emProvider.get();
-        return em.find(User.class, userId);
-    }
-
 }
