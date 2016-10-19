@@ -18,11 +18,12 @@ import java.util.UUID;
 @Table(name="users")
 @Indexed
 public class User {
+
     @Id
+    private UUID userId;
+    @Field(index = Index.YES, analyze = Analyze.NO, store = Store.NO)
     private String emailAddress;
     private String password;
-    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
-    private UUID userId;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String firstName;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)

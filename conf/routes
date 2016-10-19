@@ -15,6 +15,8 @@ GET     /api/story/n/:n          controllers.StoryController.getStories(n: Int)
 
 GET     /api/story/current-user      controllers.StoryController.getCurrentUserStories
 
+GET     /api/story/:authorId      controllers.StoryController.getStoryByAuthorId(authorId: java.util.UUID)
+
 POST    /api/story/publish          controllers.StoryController.addStory
 
 # User controller CRUD

@@ -25,7 +25,7 @@ import services.HttpAuthorizationParser;
 
 @JsonSerialize
 public class StoryController extends Controller {
-    private static final ObjectMapper objectMapper;
+    private static ObjectMapper objectMapper;
     private StoryDAO storyDAO;
     private UserDAO userDAO;
 
@@ -47,7 +47,7 @@ public class StoryController extends Controller {
             return badRequest("Expected JSON body");
         }
         Story story = Json.fromJson(storyAsJson, Story.class);
-        User author = userDAO.getUser(userEmail);
+        User author = userDAO.findUserByEmail(userEmail);
         story.setAuthorId(author.getUserId());
         storyDAO.addStory(story);
         return ok("Story added to database");
@@ -73,13 +73,25 @@ public class StoryController extends Controller {
     @BasicAuth
     public Result getCurrentUserStories(){
         String userEmail = getEmailFromHeader();
-        User currentUser = userDAO.getUser(userEmail);
+        User currentUser = userDAO.findUserByEmail(userEmail);
         List<Story> stories = storyDAO.getStoriesByAuthorId(currentUser.getUserId());
         if (stories.isEmpty()) {
             return badRequest("No stories found for current user");
         }
         ArrayNode arrayNode = objectMapper.valueToTree(stories);
-        arrayNode.add(Json.toJson(currentUser));
+        arrayNode.add(objectMapper.valueToTree(currentUser));
+        return ok(arrayNode);
+    }
+
+    public Result getStoryByAuthorId(UUID authorId){
+        List<Story> stories = storyDAO.getStoriesByAuthorId(authorId);
+        if(stories.isEmpty()){
+            return badRequest("No stories found for user");
+        }
+        ArrayNode arrayNode = objectMapper.valueToTree(stories);
+        //Add author's information to returned json.
+        User author = userDAO.getUser(authorId);
+        arrayNode.add(objectMapper.valueToTree(author));
         return ok(arrayNode);
     }
 

@@ -8,6 +8,7 @@ import model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -20,23 +21,38 @@ public class UserDAO {
 
     @Transactional
     public boolean addUser(User user){
-        boolean userAdded;
-        EntityManager em = emProvider.get();
-        em.getTransaction().begin();
-        try {
-            em.persist(user);
-            em.getTransaction().commit();
-            userAdded = true;
-        } catch(PersistenceException e){
-            userAdded = false;
+        //Check to see if this email address is already stored in database
+        if(findUserByEmail(user.getEmailAddress()) != null){
+            return false;
+        } else {
+            boolean userAdded;
+            EntityManager em = emProvider.get();
+            em.getTransaction().begin();
+            try {
+                em.persist(user);
+                em.getTransaction().commit();
+                userAdded = true;
+            } catch (PersistenceException e) {
+                userAdded = false;
+            }
+            return userAdded;
         }
-        return userAdded;
     }
 
     @Transactional
-    public User getUser(String emailAddress){
+    public User getUser(UUID userId){
         EntityManager em = emProvider.get();
-        return em.find(User.class, emailAddress);
+        return em.find(User.class, userId);
+    }
+
+    @Transactional
+    public User findUserByEmail(String emailAddress){
+        EntityManager em = emProvider.get();
+        List<User> results = em.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class).setParameter("emailAddress", emailAddress).getResultList();
+        if(results.isEmpty()){
+            return null;
+        }
+        return results.get(0);
     }
 
 }

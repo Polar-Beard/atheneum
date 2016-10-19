@@ -31,7 +31,7 @@ public class BasicAuthAction extends Action<BasicAuth> {
         }
         String emailAddress = credString[0];
         String password = credString[1];
-        User user = (new UserDAO()).getUser(emailAddress);
+        User user = (new UserDAO()).findUserByEmail(emailAddress);
         if(user == null){
             return CompletableFuture.completedFuture(Results.badRequest("User does not exist"));
         }
