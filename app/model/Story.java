@@ -1,13 +1,9 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
 
 import java.util.UUID;
-import java.util.Date;
 
 import javax.persistence.*;
 
@@ -22,16 +18,10 @@ public class Story {
     private String title;
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String description;
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
+    private String body;
     @Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
     private UUID authorId;
-
-    public UUID getAuthorId(){
-        return authorId;
-    }
-
-    public void setAuthorId(UUID authorId){
-        this.authorId = authorId;
-    }
 
     public Story(){
         this.storyId = UUID.randomUUID();
@@ -49,6 +39,13 @@ public class Story {
         return description;
     }
 
+    public String getBody() {
+        return body;
+    }
+    public UUID getAuthorId(){
+        return authorId;
+    }
+
     public void setStoryId(UUID storyId){
       this.storyId = storyId;
     }
@@ -61,5 +58,12 @@ public class Story {
         this.description = description;
     }
 
+    public void setAuthorId(UUID authorId){
+        this.authorId = authorId;
+    }
+
+    public void setBody(String body){
+        this.body = body;
+    }
 
 }
