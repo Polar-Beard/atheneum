@@ -16,9 +16,13 @@
             <property name="hibernate.ogm.datastore.username" value="admin" />
             <property name="hibernate.ogm.datastore.password" value="admin" />
             <property name="hibernate.search.default.directory_provider" value="filesystem"/>
+<<<<<<< HEAD
             <!--Change indexBase value to /var/lucene/indexes for production,
             \Users\Sara\Marinara_Sauce\Development\atheneum-backend\atheneum\var\lucene\indexes for development -->
             <property name="hibernate.search.default.indexBase" value="/var/lucene/indexes"/>
+=======
+            <property name="hibernate.search.default.indexBase" value="/Users/Sara/Marinara_Sauce/Development/atheneum-backend/atheneum/var/lucene/indexes"/>
+>>>>>>> e0683c7... Change the persistence.xml to production
         </properties>
     </persistence-unit>
 </persistence>
