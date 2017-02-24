@@ -17,8 +17,8 @@
             <property name="hibernate.ogm.datastore.password" value="admin" />
             <property name="hibernate.search.default.directory_provider" value="filesystem"/>
             <!--Change indexBase value to /var/lucene/indexes for production,
-            \Users\Sara\Marinara_Sauce\Development\atheneum-backend\atheneum\var\lucene\indexes for development -->
-            <property name="hibernate.search.default.indexBase" value="/Users/Sara/Marinara_Sauce/Development/atheneum-backend/atheneum/var/lucene/indexes"/>
+            \Users\Sara\Marinara_Sauce\atheneum-backend\atheneum\var\lucene\indexes for development -->
+            <property name="hibernate.search.default.indexBase" value="/Users/Sara/Marinara_Sauce/atheneum-backend/atheneum/var/lucene/indexes"/>
         </properties>
     </persistence-unit>
 </persistence>

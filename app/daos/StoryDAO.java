@@ -4,10 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 
+import model.Content;
+import model.Qualifier;
+import model.Specification;
 import model.Story;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +25,18 @@ public class StoryDAO{
         EntityManager em = emProvider.get();
         em.getTransaction().begin();
         em.persist(story);
+        for(Content content: story.getContents()){
+            content.setStory(story);
+            em.persist(content);
+            for(Qualifier qualifier: content.getQualifiers()){
+                qualifier.setContent(content);
+                em.persist(qualifier);
+                for(Specification specification: qualifier.getSpecifications()){
+                    specification.setQualifier(qualifier);
+                    em.persist(specification);
+                }
+            }
+        }
         em.getTransaction().commit();
     }
 
