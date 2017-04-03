@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import actions.BasicAuth;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

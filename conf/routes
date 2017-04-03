@@ -3,24 +3,28 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                   controllers.HomeController.index
+GET     /                   controller.HomeController.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file       controllers.Assets.versioned(path="/public", file: Asset)
 
 # Story controller CRUD
-GET     /api/story/id/:id          controllers.StoryController.getStory(id: java.util.UUID)
+GET     /api/story/id/:id          controller.StoryController.getStory(id: java.util.UUID)
 
-GET     /api/story/n/:n          controllers.StoryController.getStories(n: Int)
+GET     /api/story/n/:n          controller.StoryController.getStories(n: Int)
 
-GET     /api/story/current-user      controllers.StoryController.getCurrentUserStories
+GET     /api/story/current-user      controller.StoryController.getCurrentUserStories
 
-GET     /api/story/:authorId      controllers.StoryController.getStoryByAuthorId(authorId: java.util.UUID)
+GET     /api/story/:authorId      controller.StoryController.getStoryByAuthorId(authorId: java.util.UUID)
 
-POST    /api/story/publish          controllers.StoryController.addStory
+POST    /api/story/publish          controller.StoryController.addStory
 
 # User controller CRUD
 
-POST   /api/user/register   controllers.UserController.register
+POST   /api/user/register   controller.UserController.register
 
-GET    /api/user/login      controllers.UserController.login
+GET    /api/user/login      controller.UserController.login
+
+GET   /api/categories:n    controller.CategoryController.getCategories(n: Int)
+
+GET  /api/test  controller.StoryController.testMethod

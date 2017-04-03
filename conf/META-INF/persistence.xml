@@ -12,6 +12,7 @@
         <class>model.Content</class>
         <class>model.Qualifier</class>
         <class>model.Specification</class>
+        <class>model.StoryRecord</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.ogm.datastore.provider" value="cassandra_experimental" />
@@ -21,7 +22,7 @@
             <property name="hibernate.search.default.directory_provider" value="filesystem"/>
             <!--Change indexBase value to /var/lucene/indexes for production,
             \Users\Sara\Marinara_Sauce\atheneum-backend\atheneum\var\lucene\indexes for development -->
-            <property name="hibernate.search.default.indexBase" value="/var/lucene/indexes"/>
+            <property name="hibernate.search.default.indexBase" value="\Users\Sara\Marinara_Sauce\atheneum-backend\atheneum\var\lucene\indexes"/>
         </properties>
     </persistence-unit>
 </persistence>

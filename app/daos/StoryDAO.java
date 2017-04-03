@@ -1,13 +1,12 @@
 package daos;
 
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 
-import model.Content;
-import model.Qualifier;
-import model.Specification;
-import model.Story;
+import model.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.UUID;
  */
 public class StoryDAO{
 
-   @Inject private static Provider<EntityManager> emProvider;
+   @Inject public static Provider<EntityManager> emProvider;
 
     @Transactional
     public void addStory(Story story){
@@ -41,15 +40,24 @@ public class StoryDAO{
     }
 
     @Transactional
-    public Story getStoryById(UUID id){
+    public Story getStoryById(UUID id, User user){
         EntityManager em = emProvider.get();
-        return em.find(Story.class, id);
+        Story story = em.find(Story.class, id);
+        //em.getTransaction().begin();
+        //em.persist(new StoryRecord(user, story));
+        //em.getTransaction().commit();
+        return story;
     }
 
     @Transactional
-    public List<Story> getStories(int n){
+    public List<Story> getStoriesByQuery(String query, int amount){
         EntityManager em = emProvider.get();
-        return em.createQuery("SELECT s FROM Story s", Story.class).setMaxResults(n).getResultList();
+        return em.createQuery(query, Story.class).setMaxResults(amount).getResultList();
+    }
+
+    @Transactional
+    public List<Story> getStories(int amount){
+        return getStoriesByQuery("SELECT s FROM Story s", amount);
     }
 
     @Transactional

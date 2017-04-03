@@ -1,33 +1,47 @@
-package controllers;
+package controller;
 
 import actions.BasicAuth;
+import akka.actor.ActorSystem;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import com.google.inject.Inject;
 import daos.StoryDAO;
+import daos.StoryRecordDAO;
 import daos.UserDAO;
 
 import model.Story;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import model.StoryRecord;
 import model.User;
+import play.libs.Akka;
 import play.mvc.*;
 import play.libs.Json;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import scala.concurrent.duration.FiniteDuration;
 import services.HttpAuthorizationParser;
+import services.StoryRecordRunnable;
+
+import javax.persistence.EntityManager;
 
 @JsonSerialize
 public class StoryController extends Controller {
+
+    @Inject ActorSystem actorSystem;
     private static ObjectMapper objectMapper;
     private StoryDAO storyDAO;
     private UserDAO userDAO;
+    private StoryRecordDAO recordDAO;
+    private DatabaseAccessor databaseAccessor = new DatabaseAccessor();
 
     static{
         objectMapper = new ObjectMapper();
@@ -37,6 +51,7 @@ public class StoryController extends Controller {
     public StoryController(){
         storyDAO = new StoryDAO();
         userDAO = new UserDAO();
+        recordDAO = new StoryRecordDAO();
     }
 
     @BasicAuth
@@ -47,21 +62,38 @@ public class StoryController extends Controller {
             return badRequest("Expected JSON body");
         }
         Story story = Json.fromJson(storyAsJson, Story.class);
-        User author = userDAO.findUserByEmail(userEmail);
+        User author = userDAO.findUserByEmail(databaseAccessor.getEntityManager(),userEmail);
         story.setAuthorId(author.getUserId());
         storyDAO.addStory(story);
         return ok("Story added to database");
     }
 
+    @BasicAuth
     public Result getStory(UUID storyId) {
         if (storyId == null) {
             return badRequest("Missing parameter [storyId]");
         }
-        Story story = storyDAO.getStoryById(storyId);
+        String userEmail = getEmailFromHeader();
+
+        EntityManager entityManager = databaseAccessor.beginTransaction();
+
+        User user = entityManager.find(User.class, UUID.fromString("7015d61d-fd6a-4dee-81c5-ec5aa499bf1c"));
+
+        Story story = entityManager.find(Story.class, storyId);
+
+        StoryRecord storyRecord = new StoryRecord(user, story);
+        entityManager.persist(storyRecord);
+
+        user.getStoryRecords().add(storyRecord);
+        story.getStoryRecords().add(storyRecord);
+
+        databaseAccessor.commitTransaction(entityManager);
+
         JsonNode jsonNode = objectMapper.valueToTree(story);
         return ok(jsonNode);
     }
 
+    @BasicAuth
     public Result getStories(int numberOfStories) {
         List<Story> stories = storyDAO.getStories(numberOfStories);
         if (stories.isEmpty()) {
@@ -74,7 +106,7 @@ public class StoryController extends Controller {
     @BasicAuth
     public Result getCurrentUserStories(){
         String userEmail = getEmailFromHeader();
-        User currentUser = userDAO.findUserByEmail(userEmail);
+        User currentUser = userDAO.findUserByEmail(databaseAccessor.getEntityManager(), userEmail);
         List<Story> stories = storyDAO.getStoriesByAuthorId(currentUser.getUserId());
         if (stories.isEmpty()) {
             return badRequest("No stories found for current user");
@@ -84,6 +116,7 @@ public class StoryController extends Controller {
         return ok(arrayNode);
     }
 
+    @BasicAuth
     public Result getStoryByAuthorId(UUID authorId){
         List<Story> stories = storyDAO.getStoriesByAuthorId(authorId);
         if(stories.isEmpty()){
@@ -100,5 +133,26 @@ public class StoryController extends Controller {
         HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
         String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
         return credString[0];
+    }
+
+    private void createAndStoreStoryRecord(String userEmail, Story story){
+        /*StoryRecordRunnable runnable = new StoryRecordRunnable(userEmail, story);
+
+        actorSystem.scheduler().schedule(FiniteDuration.create(0, TimeUnit.SECONDS),
+                FiniteDuration.create(1, TimeUnit.SECONDS),
+                runnable,
+                actorSystem.dispatcher());*/
+    }
+
+    public Result testMethod(){
+        EntityManager entityManager = databaseAccessor.beginTransaction();
+        User user = entityManager.find(User.class, UUID.fromString("7015d61d-fd6a-4dee-81c5-ec5aa499bf1c"));
+        Story story = entityManager.find(Story.class, UUID.fromString("8d4f5aec-a5a0-411c-94e9-11a6c651e177"));
+        StoryRecord storyRecord = new StoryRecord(user, story);
+        entityManager.persist(storyRecord);
+        user.getStoryRecords().add(storyRecord);
+        story.getStoryRecords().add(storyRecord);
+        databaseAccessor.commitTransaction(entityManager);
+        return ok();
     }
 }

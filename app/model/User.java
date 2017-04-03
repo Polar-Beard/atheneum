@@ -1,6 +1,7 @@
 package model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import daos.UserDAO;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
@@ -8,6 +9,8 @@ import org.hibernate.search.annotations.Index;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -15,7 +18,7 @@ import java.util.UUID;
  * Created by Sara on 9/30/2016.
  */
 @Entity
-@Table(name="users")
+@Table(name="user")
 @Indexed
 public class User {
 
@@ -28,6 +31,10 @@ public class User {
     private String firstName;
     @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     private String lastName;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonManagedReference
+    private List<StoryRecord> storyRecords = new ArrayList<>();
 
     public User(){
         this.userId = UUID.randomUUID();
@@ -75,6 +82,14 @@ public class User {
 
     public String getLastName(){
         return lastName;
+    }
+
+    public void setStoryRecords(List<StoryRecord> storyRecords){
+        this.storyRecords = storyRecords;
+    }
+
+    public List<StoryRecord> getStoryRecords(){
+        return storyRecords;
     }
 
 }

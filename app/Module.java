@@ -8,6 +8,7 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
 
+import controller.DatabaseAccessor;
 import daos.StoryDAO;
 import daos.UserDAO;
 import services.IndexInitializer;
@@ -32,6 +33,7 @@ public class Module extends AbstractModule {
         bind(IndexInitializer.class).asEagerSingleton();
         requestStaticInjection(StoryDAO.class);
         requestStaticInjection(UserDAO.class);
+        requestStaticInjection(DatabaseAccessor.class);
     }
 
     @Singleton

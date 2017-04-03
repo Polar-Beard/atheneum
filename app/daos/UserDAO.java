@@ -49,11 +49,16 @@ public class UserDAO {
     @Transactional
     public User findUserByEmail(String emailAddress){
         EntityManager em = emProvider.get();
+        return findUserByEmail(em,emailAddress);
+    }
+
+    public User findUserByEmail(EntityManager entityManager, String emailAddress){
         try{
-            Query query = em.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class);
+            Query query = entityManager.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class);
             query.setParameter("emailAddress", emailAddress);
             List<User> results = query.getResultList();
             if(results.isEmpty()){
+                System.out.println("It's empty");
                 return null;
             }
             return results.get(0);
@@ -61,6 +66,14 @@ public class UserDAO {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Transactional
+    public void mergeUser(User user){
+        EntityManager em = emProvider.get();
+        em.getTransaction().begin();
+        em.merge(user);
+        em.getTransaction().commit();
     }
 
 }
