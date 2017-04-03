@@ -77,8 +77,9 @@ public class StoryController extends Controller {
 
         EntityManager entityManager = databaseAccessor.beginTransaction();
 
-        User user = entityManager.find(User.class, UUID.fromString("7015d61d-fd6a-4dee-81c5-ec5aa499bf1c"));
+        User user1 = userDAO.findUserByEmail(userEmail);
 
+        User user = entityManager.find(User.class, user1.getUserId());
         Story story = entityManager.find(Story.class, storyId);
 
         StoryRecord storyRecord = new StoryRecord(user, story);
@@ -88,6 +89,7 @@ public class StoryController extends Controller {
         story.getStoryRecords().add(storyRecord);
 
         databaseAccessor.commitTransaction(entityManager);
+
 
         JsonNode jsonNode = objectMapper.valueToTree(story);
         return ok(jsonNode);

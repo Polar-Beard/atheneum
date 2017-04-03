@@ -57,6 +57,7 @@ public class UserDAO {
             Query query = entityManager.createQuery("FROM User u WHERE u.emailAddress = :emailAddress", User.class);
             query.setParameter("emailAddress", emailAddress);
             List<User> results = query.getResultList();
+            entityManager.clear();
             if(results.isEmpty()){
                 System.out.println("It's empty");
                 return null;
