@@ -26,5 +26,3 @@ POST   /api/user/register   controller.UserController.register
 GET    /api/user/login      controller.UserController.login
 
 GET   /api/categories:n    controller.CategoryController.getCategories(n: Int)
-
-GET  /api/test  controller.StoryController.testMethod

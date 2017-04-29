@@ -29,8 +29,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import scala.concurrent.duration.FiniteDuration;
 import services.HttpAuthorizationParser;
-import services.StoryRecordRunnable;
-
 import javax.persistence.EntityManager;
 
 @JsonSerialize
@@ -135,26 +133,5 @@ public class StoryController extends Controller {
         HttpAuthorizationParser httpAuthorizationParser = new HttpAuthorizationParser();
         String[] credString = httpAuthorizationParser.getAuthorizationFromHeader(ctx());
         return credString[0];
-    }
-
-    private void createAndStoreStoryRecord(String userEmail, Story story){
-        /*StoryRecordRunnable runnable = new StoryRecordRunnable(userEmail, story);
-
-        actorSystem.scheduler().schedule(FiniteDuration.create(0, TimeUnit.SECONDS),
-                FiniteDuration.create(1, TimeUnit.SECONDS),
-                runnable,
-                actorSystem.dispatcher());*/
-    }
-
-    public Result testMethod(){
-        EntityManager entityManager = databaseAccessor.beginTransaction();
-        User user = entityManager.find(User.class, UUID.fromString("7015d61d-fd6a-4dee-81c5-ec5aa499bf1c"));
-        Story story = entityManager.find(Story.class, UUID.fromString("8d4f5aec-a5a0-411c-94e9-11a6c651e177"));
-        StoryRecord storyRecord = new StoryRecord(user, story);
-        entityManager.persist(storyRecord);
-        user.getStoryRecords().add(storyRecord);
-        story.getStoryRecords().add(storyRecord);
-        databaseAccessor.commitTransaction(entityManager);
-        return ok();
     }
 }
